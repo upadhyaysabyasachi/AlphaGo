@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Planning Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            padding: 30px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .message.assistant .message-content {
+            background: #f8f9fa;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .input-container {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .options-container {
+            margin-top: 15px;
+        }
+
+        .option-button {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .option-button:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .option-button.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .masterplan-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .masterplan-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-rocket"></i> Landing Page Planning Assistant</h1>
+            <p>Your friendly guide to creating the perfect landing page or portfolio</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2><i class="fas fa-comments"></i> Let's Plan Your Perfect Site!</h2>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! 👋 I'm your friendly landing page planning assistant. I'm here to help you create an amazing website that perfectly represents you and your goals.</p>
+                        <p>I'll ask you a series of simple questions to understand what you want to achieve. Once I have a clear picture, I'll create a detailed masterplan.md file - your complete blueprint for building your site!</p>
+                        <p><strong>What's the main purpose of your landing page or portfolio?</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <div class="input-group">
+                    <input type="text" id="userInput" class="input-field" placeholder="Type your answer here..." autocomplete="off">
+                    <button id="sendButton" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>Assistant is typing</span>
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="masterplan-section" id="masterplanSection">
+            <h2><i class="fas fa-file-alt"></i> Your Masterplan</h2>
+            <div id="masterplanContent"></div>
+            <button class="download-button" id="downloadButton">
+                <i class="fas fa-download"></i> Download masterplan.md
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class LandingPagePlanner {
+            constructor() {
+                this.currentStep = 0;
+                this.userData = {};
+                this.questions = [
+                    {
+                        question: "What's the main purpose of your landing page or portfolio?",
+                        key: "purpose",
+                        followUp: "That's a great goal! Can you tell me more about what you want to achieve with this site?"
+                    },
+                    {
+                        question: "Who is your target audience? Who do you want to visit and engage with your site?",
+                        key: "audience",
+                        followUp: "Perfect! Understanding your audience helps us design the right experience. What specific problems or needs does your audience have?"
+                    },
+                    {
+                        question: "What's your core message? What's the one thing you want visitors to remember about you or your work?",
+                        key: "coreMessage",
+                        followUp: "Excellent! That's a powerful message. How do you want visitors to feel when they land on your page?"
+                    },
+                    {
+                        question: "What sections do you think your site needs? (e.g., Hero, About, Projects, Services, Contact)",
+                        key: "sections",
+                        followUp: "Great choices! Are there any specific features or functionality you'd like to include?"
+                    },
+                    {
+                        question: "What visual style appeals to you? Think about colors, mood, and overall feel.",
+                        key: "visualStyle",
+                        followUp: "I love that direction! Do you have any websites or designs that inspire you?"
+                    },
+                    {
+                        question: "Do you have any existing content ready? (photos, text, case studies, testimonials)",
+                        key: "content",
+                        followUp: "That's helpful to know! What's your biggest challenge when it comes to creating content?"
+                    },
+                    {
+                        question: "What's your timeline for getting this site live?",
+                        key: "timeline",
+                        followUp: "That's a realistic timeline! Is there anything specific you'd like to prioritize first?"
+                    }
+                ];
+                
+                this.initializeEventListeners();
+                this.updateProgress();
+            }
+
+            initializeEventListeners() {
+                const userInput = document.getElementById('userInput');
+                const sendButton = document.getElementById('sendButton');
+                const downloadButton = document.getElementById('downloadButton');
+
+                userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+
+                sendButton.addEventListener('click', () => {
+                    this.sendMessage();
+                });
+
+                downloadButton.addEventListener('click', () => {
+                    this.downloadMasterplan();
+                });
+            }
+
+            async sendMessage() {
+                const userInput = document.getElementById('userInput');
+                const message = userInput.value.trim();
+                
+                if (!message) return;
+
+                // Add user message to chat
+                this.addMessage(message, 'user');
+                userInput.value = '';
+
+                // Show typing indicator
+                this.showTypingIndicator();
+
+                // Process the response
+                await this.processUserResponse(message);
+            }
+
+            addMessage(content, sender, options = null) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                avatar.innerHTML = sender === 'assistant' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.innerHTML = content;
+
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+                chatMessages.appendChild(messageDiv);
+
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                typingIndicator.style.display = 'flex';
+            }
+
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                typingIndicator.style.display = 'none';
+            }
+
+            async processUserResponse(message) {
+                // Store user response
+                if (this.currentStep < this.questions.length) {
+                    this.userData[this.questions[this.currentStep].key] = message;
+                }
+
+                // Simulate thinking time
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                this.hideTypingIndicator();
+
+                if (this.currentStep < this.questions.length - 1) {
+                    // Ask follow-up question
+                    this.currentStep++;
+                    const nextQuestion = this.questions[this.currentStep];
+                    
+                    let response = nextQuestion.followUp + '<br><br><strong>' + nextQuestion.question + '</strong>';
+                    
+                    // Add options for certain questions
+                    if (nextQuestion.key === 'sections') {
+                        response += '<div class="options-container">';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'hero\')">Hero Section (main banner)</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'about\')">About Me/Us</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'projects\')">Projects/Portfolio</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'services\')">Services</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'testimonials\')">Testimonials</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'contact\')">Contact</button>';
+                        response += '</div>';
+                    } else if (nextQuestion.key === 'visualStyle') {
+                        response += '<div class="options-container">';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'modern\')">Modern & Clean</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'creative\')">Creative & Bold</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'professional\')">Professional & Corporate</button>';
+                        response += '<button class="option-button" onclick="planner.selectOption(this, \'minimal\')">Minimal & Elegant</button>';
+                        response += '</div>';
+                    }
+
+                    this.addMessage(response, 'assistant');
+                } else {
+                    // Generate masterplan
+                    this.generateMasterplan();
+                }
+
+                this.updateProgress();
+            }
+
+            selectOption(button, value) {
+                // Remove previous selections
+                const options = button.parentElement.querySelectorAll('.option-button');
+                options.forEach(opt => opt.classList.remove('selected'));
+                
+                // Select current option
+                button.classList.add('selected');
+                
+                // Store the selection
+                const currentQuestion = this.questions[this.currentStep];
+                if (!this.userData[currentQuestion.key]) {
+                    this.userData[currentQuestion.key] = [];
+                }
+                if (!Array.isArray(this.userData[currentQuestion.key])) {
+                    this.userData[currentQuestion.key] = [this.userData[currentQuestion.key]];
+                }
+                
+                if (!this.userData[currentQuestion.key].includes(value)) {
+                    this.userData[currentQuestion.key].push(value);
+                }
+            }
+
+            updateProgress() {
+                const progress = ((this.currentStep + 1) / this.questions.length) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+            }
+
+            generateMasterplan() {
+                const masterplanContent = this.createMasterplanContent();
+                document.getElementById('masterplanContent').innerHTML = masterplanContent;
+                document.getElementById('masterplanSection').style.display = 'block';
+                
+                this.addMessage(
+                    '🎉 Fantastic! I\'ve created your personalized masterplan based on everything you\'ve shared. ' +
+                    'Scroll down to see your complete blueprint, and feel free to download it as a markdown file. ' +
+                    'Is there anything you\'d like to adjust or add to your plan?',
+                    'assistant'
+                );
+            }
+
+            createMasterplanContent() {
+                const sections = Array.isArray(this.userData.sections) ? this.userData.sections.join(', ') : this.userData.sections;
+                const visualStyle = Array.isArray(this.userData.visualStyle) ? this.userData.visualStyle.join(', ') : this.userData.visualStyle;
+                
+                return `
+                    <div style="line-height: 1.8; color: #333;">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">📋 Overview & Objective</h3>
+                        <p><strong>Purpose:</strong> ${this.userData.purpose || 'Not specified'}</p>
+                        <p><strong>Core Message:</strong> ${this.userData.coreMessage || 'Not specified'}</p>
+                        <p><strong>Timeline:</strong> ${this.userData.timeline || 'Not specified'}</p>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">👥 Target Audience</h3>
+                        <p>${this.userData.audience || 'Not specified'}</p>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">🏗️ Essential Sections</h3>
+                        <p>${sections || 'Not specified'}</p>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">🎨 Visual Style Guidelines</h3>
+                        <p><strong>Style Direction:</strong> ${visualStyle || 'Not specified'}</p>
+                        <p><strong>Mood:</strong> Professional yet approachable, modern and clean</p>
+                        <p><strong>Typography:</strong> Clean, readable fonts (consider Inter, Poppins, or system fonts)</p>
+                        <p><strong>Color Palette:</strong> Choose 2-3 primary colors that reflect your brand</p>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">📸 Content & Assets Checklist</h3>
+                        <p><strong>Current Content:</strong> ${this.userData.content || 'Not specified'}</p>
+                        <ul style="margin-left: 20px;">
+                            <li>High-quality photos (professional headshots, project images)</li>
+                            <li>Compelling copy for each section</li>
+                            <li>Case studies or project descriptions</li>
+                            <li>Contact information and social links</li>
+                            <li>Testimonials or client feedback</li>
+                        </ul>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">📱 Technical Considerations</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Mobile-responsive design (works on all devices)</li>
+                            <li>Fast loading times</li>
+                            <li>Accessibility features (alt text, proper contrast)</li>
+                            <li>SEO-friendly structure</li>
+                        </ul>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">🚀 Next Steps</h3>
+                        <ol style="margin-left: 20px;">
+                            <li>Choose your website builder or platform</li>
+                            <li>Gather all necessary content and assets</li>
+                            <li>Start with the hero section and work your way down</li>
+                            <li>Test on different devices and browsers</li>
+                            <li>Get feedback from friends or colleagues</li>
+                            <li>Launch and monitor performance</li>
+                        </ol>
+                        
+                        <h3 style="color: #667eea; margin: 25px 0 15px 0;">💡 Future Enhancements</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Blog section for content marketing</li>
+                            <li>Newsletter signup</li>
+                            <li>Social media integration</li>
+                            <li>Analytics tracking</li>
+                            <li>A/B testing for optimization</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            downloadMasterplan() {
+                const content = this.createMasterplanMarkdown();
+                const blob = new Blob([content], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'masterplan.md';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            createMasterplanMarkdown() {
+                const sections = Array.isArray(this.userData.sections) ? this.userData.sections.join(', ') : this.userData.sections;
+                const visualStyle = Array.isArray(this.userData.visualStyle) ? this.userData.visualStyle.join(', ') : this.userData.visualStyle;
+                
+                return `# Landing Page Masterplan
+
+## 📋 Overview & Objective
+- **Purpose:** ${this.userData.purpose || 'Not specified'}
+- **Core Message:** ${this.userData.coreMessage || 'Not specified'}
+- **Timeline:** ${this.userData.timeline || 'Not specified'}
+
+## 👥 Target Audience
+${this.userData.audience || 'Not specified'}
+
+## 🏗️ Essential Sections
+${sections || 'Not specified'}
+
+## 🎨 Visual Style Guidelines
+- **Style Direction:** ${visualStyle || 'Not specified'}
+- **Mood:** Professional yet approachable, modern and clean
+- **Typography:** Clean, readable fonts (consider Inter, Poppins, or system fonts)
+- **Color Palette:** Choose 2-3 primary colors that reflect your brand
+
+## 📸 Content & Assets Checklist
+- **Current Content:** ${this.userData.content || 'Not specified'}
+- High-quality photos (professional headshots, project images)
+- Compelling copy for each section
+- Case studies or project descriptions
+- Contact information and social links
+- Testimonials or client feedback
+
+## 📱 Technical Considerations
+- Mobile-responsive design (works on all devices)
+- Fast loading times
+- Accessibility features (alt text, proper contrast)
+- SEO-friendly structure
+
+## 🚀 Next Steps
+1. Choose your website builder or platform
+2. Gather all necessary content and assets
+3. Start with the hero section and work your way down
+4. Test on different devices and browsers
+5. Get feedback from friends or colleagues
+6. Launch and monitor performance
+
+## 💡 Future Enhancements
+- Blog section for content marketing
+- Newsletter signup
+- Social media integration
+- Analytics tracking
+- A/B testing for optimization
+
+---
+*Generated by Landing Page Planning Assistant*
+`;
+            }
+        }
+
+        // Initialize the planner when the page loads
+        const planner = new LandingPagePlanner();
+    </script>
+</body>
+</html>
