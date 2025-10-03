@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instaoreo - Instagram DM Automation Bot | Never Miss a Message</title>
+    <meta name="description" content="Respond to every Instagram DM instantly with AI-powered automation. Free until December 31st!">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ig-pink: #E1306C;
+            --ig-orange: #F77737;
+            --ig-purple: #C13584;
+            --ig-deep-purple: #833AB4;
+            --ig-blue: #5B51D8;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark: #262626;
+            --medium-gray: #8E8E8E;
+            --success: #4CAF50;
+            --warning: #FFC107;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--ig-purple), var(--ig-pink), var(--ig-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--ig-purple);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--ig-purple), var(--ig-pink));
+            color: white;
+            box-shadow: 0 4px 15px rgba(225, 48, 108, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--ig-purple);
+            border: 2px solid var(--ig-purple);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ig-purple);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(225, 48, 108, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .badge {
+            background: var(--warning);
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-weight: 600;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .trust-indicator {
+            margin-top: 30px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--light-gray);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .problem-card {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .problem-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--ig-purple), var(--ig-pink));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        /* Features */
+        .features {
+            background: var(--light-gray);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--medium-gray);
+            line-height: 1.7;
+        }
+
+        /* Use Cases */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .use-case {
+            background: linear-gradient(135deg, var(--ig-purple) 0%, var(--ig-pink) 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 20px;
+        }
+
+        .use-case h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .use-case ul {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .use-case li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .use-case li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .use-case-example {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        /* Pricing */
+        .pricing {
+            background: var(--light-gray);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 60px auto 0;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background: var(--warning);
+            color: var(--dark);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .pricing-card h3 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--ig-purple), var(--ig-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .price-note {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-note {
+            text-align: center;
+            margin-top: 40px;
+            background: var(--warning);
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .stars {
+            color: var(--warning);
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            color: var(--dark);
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--ig-purple);
+        }
+
+        /* FAQ */
+        .faq {
+            background: var(--light-gray);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: var(--light-gray);
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-answer.active {
+            padding: 25px;
+            max-height: 500px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+
+        .faq-icon.active {
+            transform: rotate(45deg);
+        }
+
+        /* About */
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .founder-quote {
+            background: var(--light-gray);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            font-style: italic;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .founder-name {
+            margin-top: 20px;
+            font-weight: 600;
+            color: var(--ig-purple);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, var(--ig-deep-purple) 0%, var(--ig-pink) 50%, var(--ig-orange) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .final-cta p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-note {
+            margin-top: 20px;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+            }
+
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🍪 Instaoreo</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#signup" class="btn btn-primary">Start Free</a>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">🎉 FREE until December 31st—Sign Up Now!</div>
+                <h1>Finally, Respond to Every Instagram DM Instantly—Without Being Glued to Your Phone</h1>
+                <p>Instaoreo is your AI-powered Instagram assistant that replies to DMs like a human, captures leads, and never misses a message. Perfect for busy business owners and content creators.</p>
+                <div class="hero-buttons">
+                    <a href="#signup" class="btn btn-primary">Start Free - No Credit Card Needed</a>
+                    <a href="#demo" class="btn btn-secondary">Watch How It Works</a>
+                </div>
+                <div class="trust-indicator">Part of the Whatsoreo family</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sound Familiar?</h2>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📱</div>
+                    <h3>Drowning in Repetitive Questions</h3>
+                    <p>Spending hours every day responding to the same questions over and over</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😰</div>
+                    <h3>Missing Important Messages</h3>
+                    <p>Missing important DMs because you can't be online 24/7</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Losing Potential Sales</h3>
+                    <p>Losing potential customers because responses come too late</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>Your Instagram Inbox on Autopilot in 3 Simple Steps</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Connect Your Account</h3>
+                    <p>Link Instaoreo to your Instagram in under 2 minutes. No technical skills needed.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Train Your AI Assistant</h3>
+                    <p>Set up keyword triggers, custom responses, and let our AI learn your brand voice.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Sit Back & Watch It Work</h3>
+                    <p>Instaoreo responds instantly, captures leads, and notifies you when human attention is needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features That Make Life Easier</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Human-Like Conversations</h3>
+                    <p>AI-powered responses that sound natural and friendly—your customers won't know it's a bot</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant 24/7 Replies</h3>
+                    <p>Never miss a message again. Instaoreo responds in seconds, any time of day or night</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Keyword Triggers</h3>
+                    <p>Set up custom automated responses based on specific words or questions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI Learning</h3>
+                    <p>The more it interacts, the smarter it gets—adapting to your brand's unique voice</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛒</div>
+                    <h3>E-commerce Integration</h3>
+                    <p>Connect to your online store and handle product inquiries, orders, and support seamlessly</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Payment Gateway Integration</h3>
+                    <p>Accept payments directly through Instagram DMs—turn conversations into sales</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for You</h2>
+            </div>
+            <div class="use-cases-grid">
+                <div class="use-case">
+                    <h3>Perfect for Business Owners</h3>
+                    <ul>
+                        <li>Close more sales while you sleep</li>
+                        <li>Handle customer support automatically</li>
+                        <li>Process orders through DMs</li>
+                        <li>Free up time to grow your business</li>
+                    </ul>
+                    <div class="use-case-example">
+                        "E-commerce shops use Instaoreo to answer product questions, share shipping info, and accept payments—all automatically."
+                    </div>
+                </div>
+                <div class="use-case">
+                    <h3>Built for Content Creators</h3>
+                    <ul>
+                        <li>Stay engaged with your audience 24/7</li>
+                        <li>Answer common questions automatically</li>
+                        <li>Never miss collaboration opportunities</li>
+                        <li>Focus on creating, not responding</li>
+                    </ul>
+                    <div class="use-case-example">
+                        "Influencers use Instaoreo to manage brand inquiries, respond to followers, and handle partnership requests instantly."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing</h2>
+                <p>Start FREE until December 31st—then choose your plan</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Standard Plan</h3>
+                    <div class="price">₹400<span style="font-size: 20px;">/month</span></div>
+                    <div class="price-note">after December 31st</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited automated responses</li>
+                        <li>AI learning & keyword triggers</li>
+                        <li>E-commerce integration</li>
+                        <li>Payment gateway support</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-primary" style="width: 100%; text-align: center;">Start Free Now</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3>Unlimited Plan</h3>
+                    <div class="price">₹800<span style="font-size: 20px;">/month</span></div>
+                    <div class="price-note">after December 31st</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Standard</li>
+                        <li>Unlimited Instagram accounts</li>
+                        <li>Advanced AI customization</li>
+                        <li>Priority support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-primary" style="width: 100%; text-align: center;">Start Free Now</a>
+                </div>
+            </div>
+            <div class="pricing-note">
+                🎉 Sign up before December 31st and use Instaoreo completely FREE. No credit card required.
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Loved by Business Owners & Creators Worldwide</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Instaoreo saves me 3 hours every single day! As a small business owner, I was drowning in DMs. Now Instaoreo handles 90% of inquiries automatically. Game-changer!"</p>
+                    <div class="testimonial-author">— Priya S., Boutique Owner</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"My response time went from hours to seconds. My followers love how quickly I respond now. I can focus on creating content while Instaoreo handles the rest."</p>
+                    <div class="testimonial-author">— Arjun M., Fitness Influencer</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"We've closed more sales with less effort. Instaoreo answers product questions instantly and even processes payments. It's like having a 24/7 sales team."</p>
+                    <div class="testimonial-author">— Neha K., E-commerce Store Owner</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How long does setup take?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Less than 5 minutes! Just connect your Instagram account, set up a few responses, and you're ready to go. No technical knowledge required.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Will my customers know it's a bot?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Instaoreo's AI is designed to sound natural and human-like. Plus, you can customize responses to match your brand voice perfectly.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What happens if the bot doesn't know how to answer?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Smart routing! If Instaoreo encounters a complex question, it will notify you to respond personally while handling everything else automatically.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is my Instagram account safe?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely. Instaoreo uses official Instagram APIs and follows all platform guidelines. Your account security is our top priority.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I use it on multiple Instagram accounts?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Our Unlimited Plan (₹800/month after Dec 31) supports multiple accounts.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Do I need a credit card to start the free period?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nope! Sign up completely free—no credit card required until after December 31st.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built by People Who Understand Your Struggle</h2>
+            </div>
+            <div class="about-content">
+                <p>Instaoreo is part of the Whatsoreo family—a company dedicated to helping businesses automate their messaging and save time. After helping thousands of businesses with WhatsApp automation, we saw the same problem on Instagram: talented entrepreneurs and creators drowning in DMs. So we built Instaoreo.</p>
+                <div class="founder-quote">
+                    "We built Instaoreo because we believe your time is valuable. Every minute spent on repetitive DMs is a minute stolen from growing your business or creating amazing content. Let AI handle the routine—you focus on what matters."
+                    <div class="founder-name">— Founder, Whatsoreo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Reclaim Your Time?</h2>
+            <p>Join hundreds of businesses and creators who never miss a DM—while living their lives freely.</p>
+            <div class="badge" style="display: inline-block;">⏰ FREE until December 31st—Start automating your Instagram DMs today!</div>
+            <div style="margin-top: 30px;">
+                <a href="#signup" class="btn" style="background: white; color: var(--ig-purple); font-size: 18px; padding: 15px 40px;">Get Started Free</a>
+            </div>
+            <div class="cta-note">No credit card required • Setup in 5 minutes • Cancel anytime</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>🍪 Instaoreo</h4>
+                    <p>Instagram DM automation that works like magic</p>
+                    <p style="margin-top: 15px; opacity: 0.7;">Part of the Whatsoreo family</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal & Support</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="mailto:support@whatsoreo.com">support@whatsoreo.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Whatsoreo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
+            
+            answer.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
